@@ -4,19 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Post;
+use App\Models\Post; // Postモデルのインポート
 
 class PostController extends Controller
 {
+
     public function index() {
-        $posts = DB::table('posts')->get();
+        // 投稿のページネーション
+        $posts = Post::paginate(10);
         return view('posts.index', compact('posts'));
     }
 
+
+    public function create() {
+        // 投稿データの作成ページを表示する
+        return view('posts.create');
+    }
+
+    public function store(Request $request) {
+        $request->validate([
+            'title' => 'required|max:20',
+            'content' => 'required|max:200',
+        ]);
+    
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+    
+        return redirect('/posts')->with('success', '投稿が作成されました！');
+    }
     public function show($id) {
-        // URL'/posts/{id}'の'{id}'部分と主キー（idカラム）の値が一致するデータをpostsテーブルから取得し、変数$postに代入する
         $post = Post::find($id);
-        // 変数$postをposts/show.blade.phpファイルに渡す
+       
         return view('posts.show', compact('post'));
     }
 }
