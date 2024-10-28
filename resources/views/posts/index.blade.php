@@ -8,10 +8,15 @@
 <body>
     <h1>投稿一覧</h1>
 
+<<<<<<< HEAD
     @if (session('error'))
     <div>
         {{ session('error') }}
     </div>
+=======
+    @if (session('success'))
+        <div>{{ session('success') }}</div>
+>>>>>>> c8562981540a02e07c602d6dcaa2ee738b2106fd
     @endif
 
     <table border="1">
